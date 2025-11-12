@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Christmas Countdown</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-red-200 via-green-100 to-red-200 text-center">
+
+  <h1 class="text-4xl font-bold mb-6 text-green-800 drop-shadow-lg">🎅 Christmas Countdown 🎄</h1>
+
+  <div class="bg-white p-8 rounded-3xl shadow-2xl w-80">
+    <h2 id="countdown" class="text-4xl font-mono font-semibold text-red-600 mb-2">-- days --:--:--</h2>
+    <p id="message" class="text-gray-700 mt-2"></p>
+  </div>
+
+  <script>
+    const countdownEl = document.getElementById('countdown');
+    const messageEl = document.getElementById('message');
+
+    function getNextChristmas(now = new Date()) {
+      const year = now.getFullYear();
+      const xmas = new Date(year, 11, 25, 0, 0, 0); // Dec 25, local time
+      return now <= xmas ? xmas : new Date(year + 1, 11, 25, 0, 0, 0);
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const christmas = getNextChristmas(now);
+      const diff = christmas - now;
+
+      if (diff <= 0) {
+        countdownEl.textContent = "🎁 It's Christmas! 🎄";
+        messageEl.textContent = "Merry Christmas! Enjoy the holiday season!";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      countdownEl.textContent = `${days}d ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+
+      if (days === 0) {
+        messageEl.textContent = `Only ${hours}h ${minutes}m left until Christmas!`;
+      } else {
+        messageEl.textContent = `Counting down to December 25 🎅`;
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
